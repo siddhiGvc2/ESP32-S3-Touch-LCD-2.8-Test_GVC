@@ -9,6 +9,10 @@
 #include "PCM5101.h"
 #include "LVGL_Music.h"
 
+extern void console_uart_init(void);
+
+
+
 
 
 void Driver_Loop(void *parameter)
@@ -44,6 +48,8 @@ void Driver_Init(void)
 
 void app_main(void)
 {
+    
+    console_uart_init();
     Driver_Init();
 
     SD_Init();

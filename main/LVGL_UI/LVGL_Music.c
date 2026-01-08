@@ -63,7 +63,7 @@ static lv_style_t style_title;
 static bool first_Flag = false;
 LV_IMG_DECLARE(img_lv_demo_music_btn_list_play);
 LV_IMG_DECLARE(img_lv_demo_music_btn_list_pause);
-
+extern void sendData (char *);
 void refresh_screen() {
     lv_obj_t *screen = lv_scr_act();
     lv_obj_invalidate(screen);
@@ -790,13 +790,15 @@ void LVGL_Search_Music() {
       strcpy(File_Name[i], SD_Name[i]);
       remove_file_extension(File_Name[i]); 
     }                
-    LVGL_Play_Music(0);    
+    LVGL_Play_Music(0);  
+    sendData("STARTING MUSIC");  
   }                                                             
 }
 void LVGL_Play_Music(uint32_t ID) {
   Play_Music("/sdcard",SD_Name[ID]);
   LVGL_Pause_Music();
-  strncpy(Audio_Name,File_Name[ID], sizeof(File_Name[ID]));       
+  strncpy(Audio_Name,File_Name[ID], sizeof(File_Name[ID]));  
+  sendData("PLAYING TRACK");     
 }
 
 void LVGL_Resume_Music() {

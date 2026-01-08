@@ -1,0 +1,7 @@
+#define EX_UART_NUM UART_NUM_2
+#define BUF_SIZE (1024)
+#define RD_BUF_SIZE (BUF_SIZE)
+
+#define MKM_IC_UART UART_NUM_2
+#define MKM_IC_UART_TX 43
+#define MKM_IC_UART_RX 44
