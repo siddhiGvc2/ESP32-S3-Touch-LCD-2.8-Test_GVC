@@ -16,14 +16,34 @@ static QueueHandle_t uart0_queue;
 
 static const char *TAG = "uart_events";
 extern char SD_Name[100][100] ;  
-int track_id;  
+int track_id,Total_Tracks,CurrentTrack;  
 
 
 
 
 void process_uart_packet(const char *);
+void sendData(char* data);
 char payload[200];
+ 
 
+void CalculateTotalTracks (void){
+    Total_Tracks = 0;
+    for(int i=0;i<100;i++){
+        if(SD_Name[i][0] != '\0'){
+            Total_Tracks++;
+        }
+        else{
+            break;
+        }
+    }
+}   
+
+void PlayCurrentTrack(){
+        CalculateTotalTracks ();
+        sprintf(payload,"*PLAY-OK,%s#",SD_Name[CurrentTrack]);
+        sendData(payload);
+        Play_Music("/sdcard",SD_Name[CurrentTrack]);
+ }
 
 void sendData(char* data)
 {
@@ -35,9 +55,8 @@ void process_uart_packet(const char *pkt){
      if(strncmp(pkt, "*PLAY:", 6) == 0){
        
         sscanf(pkt, "*PLAY:%d#", &track_id);
-        sprintf(payload,"*PLAY-OK,%s#",SD_Name[track_id]);
-        sendData(payload);
-        Play_Music("/sdcard",SD_Name[track_id]);
+        CurrentTrack = track_id;
+        PlayCurrentTrack();
     }
     else if(strncmp(pkt, "*PAUSE#", 7) == 0){
         Music_pause();
@@ -48,11 +67,24 @@ void process_uart_packet(const char *pkt){
         sendData("*RESUME-OK#");
     }
     else if(strncmp(pkt, "*NEXT#", 6) == 0){
-        Music_Next_Flag=1;
+        
         sendData("*NEXT-OK#");
+        CurrentTrack++;
+
+        if(CurrentTrack >= Total_Tracks){
+            CurrentTrack = 0;
+        }
+        PlayCurrentTrack();
     }
     else if(strncmp(pkt, "*PREV#", 6) == 0){
-        Music_Next_Flag=0;
+        
+        if(CurrentTrack == 0){
+            CurrentTrack = Total_Tracks-1;
+        }
+        else{
+            CurrentTrack--;
+        }
+        PlayCurrentTrack();    
         sendData("*PREV-OK#");
     }
     else if(strncmp(pkt, "*VOLUME:", 8) == 0){

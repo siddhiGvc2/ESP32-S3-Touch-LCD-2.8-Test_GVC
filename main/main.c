@@ -8,9 +8,10 @@
 #include "PWR_Key.h"
 #include "PCM5101.h"
 #include "LVGL_Music.h"
+#include "externVars.h"
 
 extern void console_uart_init(void);
-
+extern void CalculateTotalTracks (void);
 
 
 
@@ -48,7 +49,7 @@ void Driver_Init(void)
 
 void app_main(void)
 {
-    
+    Total_Tracks = 20; // Set total tracks to 20 for testing
     console_uart_init();
     Driver_Init();
 
