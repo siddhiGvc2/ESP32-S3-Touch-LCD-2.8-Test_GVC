@@ -15,15 +15,13 @@ static QueueHandle_t uart0_queue;
 
 
 static const char *TAG = "uart_events";
+extern char SD_Name[100][100] ;    
+
 
 
 
 void process_uart_packet(const char *);
-
-void process_uart_packet(const char *pkt){
-    ;
-}
-
+char payload[200];
 
 
 void sendData(char* data)
@@ -31,6 +29,20 @@ void sendData(char* data)
     const int len = strlen(data);
     const int txBytes = uart_write_bytes(EX_UART_NUM, data, len);
 }
+
+void process_uart_packet(const char *pkt){
+     if(strncmp(pkt, "*PLAY:", 6) == 0){
+        int track_id;   
+        sscanf(pkt, "*PLAY:%d#", &track_id);
+        sprintf(payload,"*PLAY-OK,%s#",SD_Name[track_id]);
+        sendData(payload);
+        Play_Music("/sdcard",SD_Name[track_id]);
+    }
+
+}
+
+
+
 
 
 
