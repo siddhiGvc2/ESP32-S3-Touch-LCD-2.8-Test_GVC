@@ -17,21 +17,74 @@ static const char *TAG = "COMMAND";
 void AnalyseGeneralCommands (char* pkt) {
     char payload[800];
     int track_id;
+     if(strncmp(pkt, "*PLAY:", 6) == 0){
+       
+        sscanf(pkt, "*PLAY:%d#", &track_id);
+        CurrentTrack = track_id;
+        PlayCurrentTrack();
+    }
+    else if(strncmp(pkt, "*PAUSE#", 7) == 0){
+        Music_pause();
+        sendData("*PAUSE-OK#");
+    }
+    else if(strncmp(pkt, "*RESUME#", 8) == 0){
+        Music_resume();
+        sendData("*RESUME-OK#");
+    }
+    else if(strncmp(pkt, "*NEXT#", 6) == 0){
+        
+        sendData("*NEXT-OK#");
+        CurrentTrack++;
 
-    if(strncmp(pkt, "*SN?#", 5) == 0){
+        if(CurrentTrack >= Total_Tracks){
+            CurrentTrack = 0;
+        }
+        PlayCurrentTrack();
+    }
+    else if(strncmp(pkt, "*PREV#", 6) == 0){
+        
+        if(CurrentTrack == 0){
+            CurrentTrack = Total_Tracks-1;
+        }
+        else{
+            CurrentTrack--;
+        }
+        PlayCurrentTrack();    
+        sendData("*PREV-OK#");
+    }
+    else if(strncmp(pkt, "*VOLUME:", 8) == 0){
+        int vol;
+        sscanf(pkt, "*VOLUME:%d#", &vol);
+        if(vol <= Volume_MAX){
+            Volume = vol;
+            sprintf(payload,"*VOLUME-OK,%d#",vol);
+            sendData(payload);
+        }
+        else{
+            sendData("*VOLUME-ERR#");
+        }
+    }
+   
+
+}
+
+void AnalyseKwikpayCommands (char* pkt) {
+    char payload[800];
+    int track_id;
+     if(strncmp(pkt, "*SN?#", 5) == 0){
         sprintf(payload, "*SN,%s,%s,%s#",SNuserName,SNdateTime,SerialNumber); //actual when in production
         sendData(payload);
     }
     else if(strncmp(pkt, "*URL?#", 6) == 0){
-         sprintf(payload,"*URL,%s,%s,%s#",URLuserName,URLdateTime,FOTA_URL);
-         sendData(payload);
-     }
-      else if(strncmp(pkt,"*RSSI?#",7)==0)
-     {
-        sprintf(payload,"*RSSI,%d",RSSI);
+        sprintf(payload,"*URL,%s,%s,%s#",URLuserName,URLdateTime,FOTA_URL);
         sendData(payload);
-     }
-     else if(strncmp(pkt, "*SSID?#", 7) == 0){
+    }
+    else if(strncmp(pkt,"*RSSI?#",7)==0)
+    {
+    sprintf(payload,"*RSSI,%d",RSSI);
+    sendData(payload);
+    }
+    else if(strncmp(pkt, "*SSID?#", 7) == 0){
         sprintf(payload, "*SSID,%s,%s,%d,%s,%s,%s#",SSuserName,SSdateTime,WiFiNumber,WIFI_SSID_1,WIFI_SSID_2,WIFI_SSID_3); 
         sendData(payload);
        
@@ -39,13 +92,22 @@ void AnalyseGeneralCommands (char* pkt) {
      else if(strncmp(pkt, "*FW?#", 5) == 0){
         ESP_LOGI(TAG,"*%s#",FWVersion);
         sendData(FWVersion);
+     }
+     else if(strncmp(pkt, "*SIP?#", 6) == 0){
+        sprintf(payload,"*SIP,%s,%s,%s,%d#",SIPuserName,SIPdateTime,server_ip_addr,
+                                         sp_port );
+        sendData(payload);
+       
     }
-
-}
-
-void AnalyseKwilpayCommands (char* pkt) {
-    char payload[200];
-    int track_id;
+      else if(strncmp(pkt, "*MIP?#", 6) == 0){
+        sprintf(payload,"*MIP,%s,%s,%s,%d#",MIPuserName,MIPdateTime,mqtt_uri,MipNumber);
+        sendData(payload);
+       
+    }
+    else if (strncmp(pkt, "*ERASE?", 7) == 0){
+        sprintf(payload,"*ERASE,%s,%s,%s#",ERASEuserName,ERASEdateTime,ErasedSerialNumber); 
+        sendData(payload);
+    }
 }
 
 void AnalyseVendingCommands (char* pkt) {

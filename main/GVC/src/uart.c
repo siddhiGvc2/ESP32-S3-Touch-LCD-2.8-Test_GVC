@@ -53,53 +53,9 @@ void sendData(char* data)
 }
 
 void process_uart_packet(const char *pkt){
-     if(strncmp(pkt, "*PLAY:", 6) == 0){
-       
-        sscanf(pkt, "*PLAY:%d#", &track_id);
-        CurrentTrack = track_id;
-        PlayCurrentTrack();
-    }
-    else if(strncmp(pkt, "*PAUSE#", 7) == 0){
-        Music_pause();
-        sendData("*PAUSE-OK#");
-    }
-    else if(strncmp(pkt, "*RESUME#", 8) == 0){
-        Music_resume();
-        sendData("*RESUME-OK#");
-    }
-    else if(strncmp(pkt, "*NEXT#", 6) == 0){
-        
-        sendData("*NEXT-OK#");
-        CurrentTrack++;
+     AnalyseGeneralCommands(pkt);
 
-        if(CurrentTrack >= Total_Tracks){
-            CurrentTrack = 0;
-        }
-        PlayCurrentTrack();
-    }
-    else if(strncmp(pkt, "*PREV#", 6) == 0){
-        
-        if(CurrentTrack == 0){
-            CurrentTrack = Total_Tracks-1;
-        }
-        else{
-            CurrentTrack--;
-        }
-        PlayCurrentTrack();    
-        sendData("*PREV-OK#");
-    }
-    else if(strncmp(pkt, "*VOLUME:", 8) == 0){
-        int vol;
-        sscanf(pkt, "*VOLUME:%d#", &vol);
-        if(vol <= Volume_MAX){
-            Volume = vol;
-            sprintf(payload,"*VOLUME-OK,%d#",vol);
-            sendData(payload);
-        }
-        else{
-            sendData("*VOLUME-ERR#");
-        }
-    }
+    
 
 }
 

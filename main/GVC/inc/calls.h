@@ -1,1 +1,3 @@
-extern void sendData(char* data);
+extern void sendData(char*);
+extern void AnalyseGeneralCommands(char*);
+extern void PlayCurrentTrack();
