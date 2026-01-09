@@ -22,7 +22,41 @@ void SendReply(char* data)
    sendData(data);
 }
 
-void AnalyseGeneralCommands (char* pkt) {
+void AnalyseKwikpayCommands (char* InputVia, char* rx_buffer)
+{
+    char payload[600];
+     if(strncmp(rx_buffer, "*V:", 3) == 0){
+        if (edges == 0) 
+        {
+            AckPulseReceived = 0;
+            sscanf(rx_buffer, "*V:%[^:]:%d:%d#",TID,&pin,&pulses);
+    
+            if (memcmp(TID, LastTID, 100) != 0)
+            {
+                edges = pulses*2;  // doubled edges
+                ESP_LOGI(InputVia, "*V-OK,%s,%d,%d#",TID,pin,pulses);
+                sprintf(payload, "*V-OK,%s,%d,%d#", TID,pin,pulses); //actual when in production
+                SendReply(payload);
+                vTaskDelay(1000/portTICK_PERIOD_MS);
+                sprintf(payload, "*T-OK,%s,%d,%d#",TID,pin,pulses); //actual when in production
+                ESP_LOGI(InputVia, "*T-OK,%s,%d,%d#",TID,pin,pulses);
+                SendReply(payload);
+                Totals[pin-1] += pulses;
+                strcpy(LastTID,TID);
+            }
+            else
+            {
+              ESP_LOGI(InputVia,"Duplicate TID");
+              SendReply("*DUP TID#");
+              
+            }  
+
+        }
+    }
+}
+
+
+void AnalyseAACCommands (char* InputVia,char* pkt) {
     char payload[800];
     int track_id;
      if(strncmp(pkt, "*PLAY:", 6) == 0){
@@ -76,7 +110,7 @@ void AnalyseGeneralCommands (char* pkt) {
 
 }
 
-void AnalyseKwikpayCommands (char* pkt) {
+void AnalyseGeneralCommands (char* InputVia,char* pkt) {
     char payload[800];
     int track_id;
      if(strncmp(pkt, "*SN?#", 5) == 0){
@@ -118,12 +152,12 @@ void AnalyseKwikpayCommands (char* pkt) {
     }
 }
 
-void AnalyseVendingCommands (char* pkt) {
+void AnalyseVendingCommands (char* InputVia,char* pkt) {
     char payload[200];
     int track_id;
 }
 
-void AnalyseWAMCommands (char* pkt) {
+void AnalyseWAMCommands (char* InputVia,char* pkt) {
     char payload[200];
     int track_id;
 }

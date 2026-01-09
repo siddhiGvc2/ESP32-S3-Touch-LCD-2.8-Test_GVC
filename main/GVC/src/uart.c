@@ -53,8 +53,8 @@ void sendData(char* data)
 }
 
 void process_uart_packet(const char *pkt){
-     AnalyseGeneralCommands(pkt);
-     AnalyseKwikpayCommands(pkt);
+     AnalyseGeneralCommands("UART",pkt);
+     AnalyseKwikpayCommands("UART",pkt);
     
 }
 

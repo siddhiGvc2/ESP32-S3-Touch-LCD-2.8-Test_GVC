@@ -34,6 +34,18 @@ char mqtt_user[100];
 char mqtt_pass[100];
 
 
+// kwikpay
+// edges , AckPulseReceived, TID, LastTID, pin, pulses, tx_event_pending, Totals[]
+int edges = 0; // number of edges (pulses * 2) for generating pulses on output pin
+int AckPulseReceived = 0;
+char LastTID[100];
+char TID[100];
+int pin = 0; // output pin for Generating Pulses
+int pulses = 0; // number of pulses for generating pulses on output pin
+int Totals[7];
+int CashTotals[7];
+ 
+
 // vars for AAC
 extern int track_id,Total_Tracks,CurrentTrack;  
 

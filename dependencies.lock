@@ -1,27 +1,31 @@
 dependencies:
-  chmorgan__esp-audio-player:
-    component_hash: null
+  chmorgan/esp-audio-player:
+    dependencies: []
     source:
-      path: E:\AllCodes\ESP32-S3-Touch-LCD-2.8-Test_GVC\components\chmorgan__esp-audio-player
+      path: C:\Users\me\ESP32-S3-Touch-LCD-2.8-Test_GVC\components\chmorgan__esp-audio-player
       type: local
     version: 1.0.7
-  chmorgan__esp-libhelix-mp3:
-    component_hash: null
+  chmorgan/esp-libhelix-mp3:
+    dependencies: []
     source:
-      path: E:\AllCodes\ESP32-S3-Touch-LCD-2.8-Test_GVC\components\chmorgan__esp-libhelix-mp3
+      path: C:\Users\me\ESP32-S3-Touch-LCD-2.8-Test_GVC\components\chmorgan__esp-libhelix-mp3
       type: local
     version: 1.0.3
   idf:
-    component_hash: null
     source:
       type: idf
-    version: 5.2.1
-  lvgl__lvgl:
-    component_hash: null
+    version: 5.2.5
+  lvgl/lvgl:
+    dependencies: []
     source:
-      path: E:\AllCodes\ESP32-S3-Touch-LCD-2.8-Test_GVC\components\lvgl__lvgl
+      path: C:\Users\me\ESP32-S3-Touch-LCD-2.8-Test_GVC\components\lvgl__lvgl
       type: local
     version: 8.3.11
-manifest_hash: 29136edbb14e17eecf75c43a6fef7940d7937d31eaa96d7fda82c97d6a05a719
+direct_dependencies:
+- chmorgan/esp-audio-player
+- chmorgan/esp-libhelix-mp3
+- idf
+- lvgl/lvgl
+manifest_hash: bae7528f6a6018f5803604171a6ae3af5a9a9de56f1c02b358fa393c484c750c
 target: esp32s3
-version: 1.0.0
+version: 2.0.0
