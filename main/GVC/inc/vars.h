@@ -46,6 +46,21 @@ int Totals[7];
 int CashTotals[7];
  
 
+    //  INHUserName:INHdateTime:INHOutputValue 
+char INHuserName[100];
+char INHdateTime[100];
+int INHOutputValue;
+
+char PTuserName[100];
+char PTdateTime[100];   
+char PassThruValue[2];
+
+
+char CAuserName[100];
+char CAdateTime[100];   
+int pulseWidth = 0;
+int SignalPolarity = 0;
+
 // vars for AAC
 extern int track_id,Total_Tracks,CurrentTrack;  
 

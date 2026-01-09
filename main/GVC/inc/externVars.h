@@ -43,7 +43,20 @@ extern int pin; // output pin for Generating Pulses
 extern int pulses; // number of pulses for generating pulses on output pin
 extern int Totals[7];
 extern int CashTotals[7];
- 
+
+extern char INHuserName[100];
+extern char INHdateTime[100];
+extern int INHOutputValue;
+
+extern char PTuserName[100];
+extern char PTdateTime[100];   
+extern char PassThruValue[2];
+
+extern char CAuserName[100];
+extern char CAdateTime[100];   
+extern int pulseWidth;
+extern int SignalPolarity;
+
 
 // vars for AAC
 extern int track_id,Total_Tracks,CurrentTrack;  

@@ -16,8 +16,27 @@
 
 static const char *TAG = "COMMAND";
 
+void SetINHLow(void)
+{
 
-void SendReply(char* data)
+}
+void SetINHHigh(void)
+{
+
+}
+
+void SaveInteger(const char* key, int value)
+{
+
+}
+
+void SaveString(const char* key, char* value)
+{
+
+}
+
+
+void SendReply(char* InputVia, char* data)
 {
    sendData(data);
 }
@@ -36,30 +55,166 @@ void AnalyseKwikpayCommands (char* InputVia, char* rx_buffer)
                 edges = pulses*2;  // doubled edges
                 ESP_LOGI(InputVia, "*V-OK,%s,%d,%d#",TID,pin,pulses);
                 sprintf(payload, "*V-OK,%s,%d,%d#", TID,pin,pulses); //actual when in production
-                SendReply(payload);
+                SendReply(InputVia, payload);
                 vTaskDelay(1000/portTICK_PERIOD_MS);
                 sprintf(payload, "*T-OK,%s,%d,%d#",TID,pin,pulses); //actual when in production
                 ESP_LOGI(InputVia, "*T-OK,%s,%d,%d#",TID,pin,pulses);
-                SendReply(payload);
+                SendReply(InputVia, payload);
                 Totals[pin-1] += pulses;
                 strcpy(LastTID,TID);
             }
             else
             {
               ESP_LOGI(InputVia,"Duplicate TID");
-              SendReply("*DUP TID#");
+              SendReply(InputVia, "*DUP TID#");
               
             }  
-
         }
     }
+
+    else if(strncmp(rx_buffer, "*INH:", 5) == 0){
+        if(strcmp(InputVia, "TCP") == 0 || strcmp(InputVia, "MQTT") == 0)
+        {
+            sscanf(rx_buffer, "*INH:%[^:]:%[^:]:%d#",INHuserName,INHdateTime, &INHOutputValue);
+          
+        }
+        else if(strcmp(InputVia, "UART") == 0)
+        {
+            sscanf(rx_buffer, "*INH:%d#",&INHOutputValue);
+            strcpy(INHuserName,"LOCAL");
+            strcpy(INHdateTime,"00/00/00");
+        }
+
+        if (INHOutputValue != 0)
+        {
+            INHOutputValue = 1;
+            SetINHLow();
+        }
+        else
+        {
+              SetINHHigh();
+        }
+        ESP_LOGI (InputVia, "Set INH Output as %d",INHOutputValue);
+        sprintf(payload, "*INH-DONE,%s,%s,%d#",INHuserName,INHdateTime,INHOutputValue);
+        // utils_nvs_set_str(NVS_INH_USERNAME, INHuserName);
+        SaveString(NVS_INH_USERNAME, INHuserName);
+        SaveString(NVS_INH_DATETIME, INHdateTime);
+        SaveInteger(NVS_INH_KEY, INHOutputValue);
+        SendReply(InputVia, payload);
+     }  
+
+     // PTUserName, PTdateTime, PassThruValue
+        else if(strncmp(rx_buffer, "*PT:", 4) == 0){
+        if(strcmp(InputVia, "TCP") == 0 || strcmp(InputVia, "MQTT") == 0)
+        {
+            char tempUserName[64], tempDateTime[64], tempBuf[64] ;
+            if (sscanf(rx_buffer, "*PT:%[^:]:%[^:]:%[^:#]#", tempUserName, tempDateTime, tempBuf) == 3) {
+            // Check if any of the parsed values are empty
+            if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0 ) {
+                // send error message if any required parameters are missing or invalid
+                const char* errorMsg = "*Error: Missing or invalid parameters#";
+                SendReply(InputVia,errorMsg);
+            }
+            else{
+        
+            strcpy(PTuserName, tempUserName);
+            strcpy(PTdateTime, tempDateTime);
+            strcpy(PassThruValue, tempBuf);
+             }
+            }
+            else {
+                // Send error message if parsing failed
+                const char* errorMsg = "*Error: Invalid format#";
+              SendReply(InputVia,errorMsg);
+            }
+        }
+        else if(strcmp(InputVia,"UART") == 0)
+        {
+            sscanf(rx_buffer, "*PT:%[^#]#",PassThruValue);
+            strcpy(PTuserName, "LOCAL");
+            strcpy(PTdateTime, "00/00/00");
+        }
+    
+        if (strstr(PassThruValue, "Y") == NULL && strstr(PassThruValue, "N") == NULL) {
+            strcpy(PassThruValue, "Y");
+        }
+
+        ESP_LOGI (InputVia, "Pass Thru %s",PassThruValue);
+        sprintf(payload, "*PT-OK,%s,%s,%s#",PTuserName,PTdateTime,PassThruValue);
+        SaveString(NVS_PT_USERNAME, PTuserName);
+        SaveString(NVS_PT_DATETIME, PTdateTime);
+        SendReply(InputVia,payload);
+        SaveString(NVS_PASS_THRU, PassThruValue);
+     }
+
+     // CAuserName, CAdateTime, numValue, polarity
+     // pulseWidth, SignalPolarity
+
+        else if(strncmp(rx_buffer, "*CA:", 4) == 0){
+        int numValue = 0;
+        int polarity = 0;
+        if(strcmp(InputVia, "TCP") == 0 || strcmp(InputVia, "MQTT") == 0)
+        {
+            char tempUserName[64], tempDateTime[64], tempBuf[64],tempBuf2[64];
+            if (sscanf(rx_buffer, "*CA:%[^:]:%[^:]:%[^:]:%[^:#]#", tempUserName, tempDateTime, tempBuf,tempBuf2) == 4) {
+                // Check if any of the parsed values are empty
+                if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0 || strlen(tempBuf2) == 0) {
+                    // Send error message if any required parameters are missing or invalid
+                    const char* errorMsg = "*Error: Missing or invalid parameters#";
+                    SendReply(InputVia,errorMsg);
+                }
+                else{
+                    strcpy(CAuserName, tempUserName);
+                    strcpy(CAdateTime, tempDateTime);
+                    numValue = atoi(tempBuf);
+                    polarity = atoi(tempBuf2);
+                }
+            }
+            else {
+                // Send error message if parsing failed
+                const char* errorMsg = "*Error: Invalid format#";
+                SendReply(InputVia,errorMsg);
+            }
+        }
+        else if(strcmp(InputVia, "UART") == 0)
+        {
+            sscanf(rx_buffer, "*CA:%d:%d#",&numValue,&polarity);
+            strcpy(CAuserName,"LOCAL");
+            strcpy(CAdateTime,"00/00/00"); 
+        }
+       
+      
+     
+       ESP_LOGI(InputVia, "Generate @ numValue %d polarity %d",numValue,polarity);
+       sprintf(payload, "*CA-OK,%s,%s,%d,%d#",CAuserName,CAdateTime,numValue,polarity);
+       SaveString(NVS_CA_USERNAME, CAuserName);
+       SaveString(NVS_CA_DATETIME, CAdateTime);
+       ESP_LOGI(InputVia,"CA Values Saved %s,%s",CAuserName,CAdateTime);
+       SendReply(InputVia,payload);
+       // valid values are between 25 and 100
+       if (numValue<10)
+           numValue = 25;
+       if (numValue>100)
+           numValue = 100;
+       // possible values are 0 and 1        
+       if (polarity>0)
+           polarity = 1;   
+       polarity = 0;     
+       pulseWidth=numValue;
+       SignalPolarity=polarity;
+//       Out4094(0x00);
+       SaveInteger(NVS_CA_KEY, numValue*2+polarity);
+    }
+
+
+
 }
 
 
 void AnalyseAACCommands (char* InputVia,char* pkt) {
     char payload[800];
     int track_id;
-     if(strncmp(pkt, "*PLAY:", 6) == 0){
+    if(strncmp(pkt, "*PLAY:", 6) == 0){
        
         sscanf(pkt, "*PLAY:%d#", &track_id);
         CurrentTrack = track_id;
@@ -67,15 +222,15 @@ void AnalyseAACCommands (char* InputVia,char* pkt) {
     }
     else if(strncmp(pkt, "*PAUSE#", 7) == 0){
         Music_pause();
-        SendReply("*PAUSE-OK#");
+        SendReply(InputVia, "*PAUSE-OK#");
     }
     else if(strncmp(pkt, "*RESUME#", 8) == 0){
         Music_resume();
-        SendReply("*RESUME-OK#");
+        SendReply(InputVia, "*RESUME-OK#");
     }
     else if(strncmp(pkt, "*NEXT#", 6) == 0){
         
-        SendReply("*NEXT-OK#");
+        SendReply(InputVia, "*NEXT-OK#");
         CurrentTrack++;
 
         if(CurrentTrack >= Total_Tracks){
@@ -92,7 +247,7 @@ void AnalyseAACCommands (char* InputVia,char* pkt) {
             CurrentTrack--;
         }
         PlayCurrentTrack();    
-        SendReply("*PREV-OK#");
+        SendReply(InputVia, "*PREV-OK#");
     }
     else if(strncmp(pkt, "*VOLUME:", 8) == 0){
         int vol;
@@ -100,10 +255,10 @@ void AnalyseAACCommands (char* InputVia,char* pkt) {
         if(vol <= Volume_MAX){
             Volume = vol;
             sprintf(payload,"*VOLUME-OK,%d#",vol);
-            SendReply(payload);
+            SendReply(InputVia, payload);
         }
         else{
-            SendReply("*VOLUME-ERR#");
+            SendReply(InputVia, "*VOLUME-ERR#");
         }
     }
    
