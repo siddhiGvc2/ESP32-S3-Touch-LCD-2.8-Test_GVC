@@ -1,6 +1,8 @@
 #include "defs.h"
 
 // vars for general
+
+// vars for kwikpay 
 extern char SNdateTime[100];
 extern char SNuserName[100];
 extern char URLdateTime[100];
@@ -30,9 +32,6 @@ extern char mqtt_uri[100];
 extern char mqtt_user[100];
 extern char mqtt_pass[100];
 
-
-
-// vars for kwikpay 
 
 // vars for AAC
 extern int track_id,Total_Tracks,CurrentTrack;  

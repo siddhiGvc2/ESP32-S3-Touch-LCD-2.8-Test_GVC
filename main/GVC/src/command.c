@@ -12,7 +12,15 @@
 #include "esp_log.h"
 #include "externVars.h"
 #include "calls.h"
+#include "vars.h"
+
 static const char *TAG = "COMMAND";
+
+
+void SendReply(char* data)
+{
+   sendData(data);
+}
 
 void AnalyseGeneralCommands (char* pkt) {
     char payload[800];
@@ -25,15 +33,15 @@ void AnalyseGeneralCommands (char* pkt) {
     }
     else if(strncmp(pkt, "*PAUSE#", 7) == 0){
         Music_pause();
-        sendData("*PAUSE-OK#");
+        SendReply("*PAUSE-OK#");
     }
     else if(strncmp(pkt, "*RESUME#", 8) == 0){
         Music_resume();
-        sendData("*RESUME-OK#");
+        SendReply("*RESUME-OK#");
     }
     else if(strncmp(pkt, "*NEXT#", 6) == 0){
         
-        sendData("*NEXT-OK#");
+        SendReply("*NEXT-OK#");
         CurrentTrack++;
 
         if(CurrentTrack >= Total_Tracks){
@@ -50,7 +58,7 @@ void AnalyseGeneralCommands (char* pkt) {
             CurrentTrack--;
         }
         PlayCurrentTrack();    
-        sendData("*PREV-OK#");
+        SendReply("*PREV-OK#");
     }
     else if(strncmp(pkt, "*VOLUME:", 8) == 0){
         int vol;
@@ -58,10 +66,10 @@ void AnalyseGeneralCommands (char* pkt) {
         if(vol <= Volume_MAX){
             Volume = vol;
             sprintf(payload,"*VOLUME-OK,%d#",vol);
-            sendData(payload);
+            SendReply(payload);
         }
         else{
-            sendData("*VOLUME-ERR#");
+            SendReply("*VOLUME-ERR#");
         }
     }
    
