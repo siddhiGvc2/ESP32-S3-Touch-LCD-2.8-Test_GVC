@@ -53,9 +53,9 @@
 #define NVS_MQTT1_PASS     "MQTT1_PASS"
 #define NVS_MQTT2_URI      "MQTT2_URI"
 #define NVS_MQTT2_USER     "MQTT2_USER"
-#define NVS_MQTT2_PASS     "MQTT2_PASS
+#define NVS_MQTT2_PASS     "MQTT2_PASS"
 #define NVS_MQTT3_URI      "MQTT3_URI"
-#define NVS_MQTT3_USER     "MQTT3_USER
+#define NVS_MQTT3_USER     "MQTT3_USER"
 #define NVS_MQTT3_PASS     "MQTT3_PASS"
 
 
