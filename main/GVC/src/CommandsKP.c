@@ -170,13 +170,13 @@ void AnalyseKwikpayCommands (char* InputVia, char* rx_buffer)
             sscanf(rx_buffer, "*CC:%[^:]:%[^:]:%[^#]#",CCuserName,CCdateTime,UniqueTimeStamp); // changed on 20-12-24 as per EC10
           
             sprintf(payload, "*CC-OK,%s,%s,%s#",CCuserName,CCdateTime,UniqueTimeStamp);  // changed on 20-12-24 as per EC10
-            SendReply(payload,InputVia);
+            SendReply(InputVia,payload);
         }
         else if(strcmp(InputVia, "UART") == 0){
             strcpy(CCuserName,"LOCAL");
             strcpy(CCdateTime,"00/00/00");
             sprintf(payload, "*CC-OK,%s,%s#",CCuserName,CCdateTime);
-            SendReply(payload,InputVia);
+            SendReply(InputVia,payload);
         }
 
             SaveString(NVS_CC_USERNAME, CCuserName);
@@ -241,23 +241,23 @@ void AnalyseKwikpayCommands (char* InputVia, char* rx_buffer)
       
         sprintf(payload, "*TC,%s,%d,%d,%d,%d,%d,%d,%d#", 
         UniqueTimeStamp,CashTotals[0],CashTotals[1],CashTotals[2],CashTotals[3],CashTotals[4],CashTotals[5],CashTotals[6]);
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
        
     }
     else if(strncmp(rx_buffer, "*TV?#", 5) == 0){
        
         sprintf(payload, "*TV,%d,%d,%d,%d,%d,%d,%d#", 
         Totals[0], Totals[1], Totals[2], Totals[3], Totals[4], Totals[5], Totals[6]);
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
     }
       else if(strncmp(rx_buffer, "*CC?#", 5) == 0){
         sprintf(payload,"*CC,%s,%s,%s#",CCuserName,CCdateTime,UniqueTimeStamp);
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
        
     }
     else  if(strncmp(rx_buffer, "*CA?#", 5) == 0){
         sprintf(payload,"*CA-OK,%s,%s,%d,%d#",CAuserName,CAdateTime,pulseWidth,SignalPolarity);
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
     }
 
 
