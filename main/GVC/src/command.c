@@ -39,6 +39,12 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
         SendReply(InputVia,payload);
        
     }
+     else if(strncmp(rx_buffer, "*PW142857?#", 11) == 0){
+        sprintf(payload, "*PW142857,%d,%s,%s,%s#",WiFiNumber,WIFI_PASS_1,WIFI_PASS_2,WIFI_PASS_3); 
+        ESP_LOGI(TAG,"%s",payload);
+        SendReply(InputVia,payload);
+       
+    }
      else if(strncmp(rx_buffer, "*FW?#", 5) == 0){
         ESP_LOGI(TAG,"*%s#",FWVersion);
         sprintf(payload, "*FW:%s#",FWVersion);
@@ -49,6 +55,33 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                                          sp_port );
         SendReply(InputVia,payload);
        
+    }
+    else if(strncmp(rx_buffer,"*TCP1:",6)==0)
+    {
+        sscanf(rx_buffer,"*TCP1:%s:%d#",TCP1_ip_addr,&TCP1_server_port);
+        SaveString(NVS_TCP1_IP_ADDR, TCP1_ip_addr);
+        SaveInteger(NVS_TCP1_SERVER_PORT, TCP1_server_port);
+        ESP_LOGI(InputVia,"Set TCP1 IP Address to %s",TCP1_ip_addr);
+        sprintf(payload,"*TCP1-OK,%s#",TCP1_ip_addr);
+        SendReply(InputVia,payload);
+    }
+    else if(strncmp(rx_buffer,"*TCP2:",6)==0)
+    {
+        sscanf(rx_buffer,"*TCP2:%s:%d#",TCP2_ip_addr,&TCP2_server_port);
+        SaveString(NVS_TCP2_IP_ADDR , TCP2_ip_addr);
+        SaveInteger(NVS_TCP2_SERVER_PORT, TCP2_server_port);
+        ESP_LOGI(InputVia,"Set TCP2 IP Address to %s",TCP2_ip_addr);
+        sprintf(payload,"*TCP2-OK,%s#",TCP2_ip_addr);
+        SendReply(InputVia,payload);
+    }
+    else if(strncmp(rx_buffer,"*TCP3:",6)==0)
+    {
+        sscanf(rx_buffer,"*TCP3:%s:%d#",TCP3_ip_addr,&TCP3_server_port);
+        SaveString(NVS_TCP3_IP_ADDR, TCP3_ip_addr);
+        SaveInteger(NVS_TCP3_SERVER_PORT, TCP3_server_port);
+        ESP_LOGI(InputVia,"Set TCP3 IP Address to %s",TCP3_ip_addr);
+        sprintf(payload,"*TCP3-OK,%s#",TCP3_ip_addr);
+        SendReply(InputVia,payload);
     }
       else if(strncmp(rx_buffer, "*MIP?#", 6) == 0){
         sprintf(payload,"*MIP,%s,%s,%s,%d#",MIPuserName,MIPdateTime,mqtt_uri,MipNumber);

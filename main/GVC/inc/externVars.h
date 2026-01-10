@@ -50,10 +50,15 @@ extern char server_ip_addr[100];
 extern char mqtt_uri[100];
 extern char mqtt_user[100];
 extern char mqtt_pass[100];
-
-// vars for kwikpay
-// kwikpay
-// edges , AckPulseReceived, TID, LastTID, pin, pulses, tx_event_pending, Totals[]
+extern char TCP1_ip_addr[100];
+extern char TCP2_ip_addr[100];
+extern char TCP3_ip_addr[100];
+extern int TCP1_server_port;
+extern int TCP2_server_port;
+extern int TCP3_server_port;
+    // vars for kwikpay
+    // kwikpay
+    // edges , AckPulseReceived, TID, LastTID, pin, pulses, tx_event_pending, Totals[]
 extern int edges; // number of edges (pulses * 2) for generating pulses on output pin
 extern int AckPulseReceived;
 extern char LastTID[100];

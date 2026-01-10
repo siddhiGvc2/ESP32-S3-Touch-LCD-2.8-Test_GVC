@@ -47,6 +47,12 @@ char server_ip_addr[100];
 char mqtt_uri[100];
 char mqtt_user[100];
 char mqtt_pass[100];
+char TCP1_ip_addr[100];
+char TCP2_ip_addr[100];
+char TCP3_ip_addr[100];
+int TCP1_server_port;
+int TCP2_server_port;
+int TCP3_server_port;
 
 
 // kwikpay
@@ -85,6 +91,7 @@ char RSTuserName[100];
 
 int EnabledChannel[NUM_CHANNELS] = {1,1,1,1,1,1,1};
 int16_t chValue;
+
 
 
 
