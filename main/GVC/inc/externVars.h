@@ -52,7 +52,10 @@ extern char PTdateTime[100];
 extern char PassThruValue[2];
 
 extern char CAuserName[100];
-extern char CAdateTime[100];   
+extern char CAdateTime[100];
+
+extern char CCdateTime[100];
+extern char CCuserName[100]; 
 extern int pulseWidth;
 extern int SignalPolarity;
 
