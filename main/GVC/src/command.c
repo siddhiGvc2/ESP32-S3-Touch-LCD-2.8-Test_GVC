@@ -88,7 +88,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
         SendReply(InputVia,payload);
        
     }
-    else if(strcmp(rx_buffer,"*MQTT1:",7)==0)
+    else if(strncmp(rx_buffer,"*MQTT1:",7)==0)
     {
         sscanf(rx_buffer,"*MQTT1:%[^:]:%[^#]#",mqtt_uri1,mqtt_user1,mqtt_pass1);
         SaveString(NVS_MQTT1_URI, mqtt_uri1);
@@ -98,7 +98,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
         sprintf(payload,"*MQTT1-OK,%s#",mqtt_uri1);
         SendReply(InputVia,payload);
     }
-    else if(strcmp(rx_buffer,"*MQTT2:",7)==0)
+    else if(strncmp(rx_buffer,"*MQTT2:",7)==0)
     {
         sscanf(rx_buffer,"*MQTT2:%[^:]:%[^#]#",mqtt_uri2,mqtt_user2,mqtt_pass2);
         SaveString(NVS_MQTT2_URI, mqtt_uri2);
@@ -108,7 +108,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
         sprintf(payload,"*MQTT2-OK,%s#",mqtt_uri2);
         SendReply(InputVia,payload);
     }
-    else if(strcmp(rx_buffer,"*MQTT3:",7)==0)
+    else if(strncmp(rx_buffer,"*MQTT3:",7)==0)
     {
         sscanf(rx_buffer,"*MQTT3:%[^:]:%[^#]#",mqtt_uri3,mqtt_user3,mqtt_pass3);
         SaveString(NVS_MQTT3_URI, mqtt_uri3);   
