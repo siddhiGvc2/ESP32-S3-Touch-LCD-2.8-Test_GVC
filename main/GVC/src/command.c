@@ -75,7 +75,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
         SaveString(NVS_RST_USERNAME, RSTuserName);
         SaveString(NVS_RST_DATETIME, RSTdateTime);
         sprintf(payload, "*RST-OK,%s,%s#",RSTuserName,RSTdateTime);
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
         ESP_LOGI(InputVia, "*RST-OK#");
         SendReply(InputVia,"*Resetting device#");
         RestartDevice();
@@ -127,7 +127,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                         strcpy(URLuserName, tempUserName);
                         strcpy(URLdateTime, tempDateTime);
@@ -138,7 +138,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "Error: Invalid format";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -152,7 +152,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
         sprintf(payload, "*URL-OK,%s,%s#",URLuserName,URLdateTime);
         SaveString(NVS_URL_USERNAME, URLuserName);
         SaveString(NVS_URL_DATETIME, URLdateTime);
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
         // tx_event_pending = 1;
 
     }
@@ -166,7 +166,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                   if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0  ) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 }
                 else{
 
@@ -179,7 +179,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "*Error: Invalid format#";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -202,7 +202,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             SaveString(NVS_MIP_DATETIME, MIPdateTime);
             ESP_LOGI(InputVia,"*MIP-OK,%s,%s#",MIPuserName,MIPdateTime);
         }    
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
         
        // tx_event_pending = 1;
 
@@ -217,7 +217,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                   if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0  ) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 }
                 else{
                         strcpy(SIPuserName, tempUserName);
@@ -229,7 +229,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "*Error: Invalid format#";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -252,7 +252,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             SaveString(NVS_SIP_DATETIME, SIPdateTime);
             ESP_LOGI(InputVia,"*SIP-OK,%s,%s#",SIPuserName,SIPdateTime);
         }    
-        SendReply(payload,InputVia);
+        SendReply(InputVia,payload);
       
        // tx_event_pending = 1;
 
@@ -268,7 +268,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                     // Copy parsed values to the actual variables
                     strcpy(SSuserName, tempUserName);
@@ -279,7 +279,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "*Error: Invalid format#";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -296,7 +296,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
 
            // Format the success message and send it
            sprintf(payload, "*SS-OK,%s,%s#", SSuserName, SSdateTime);
-           SendReply(payload,InputVia);
+           SendReply(InputVia,payload);
           // tx_event_pending = 1;
 
     }
@@ -311,7 +311,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                     // Copy parsed values to the actual variables
                     strcpy(SS1userName, tempUserName);
@@ -322,7 +322,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "*Error: Invalid format#";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -340,7 +340,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
 
            // Format the success message and send it
            sprintf(payload, "*SS1-OK,%s,%s#", SS1userName, SS1dateTime);
-           SendReply(payload,InputVia);
+           SendReply(InputVia,payload);
           // tx_event_pending = 1;
 
     }
@@ -355,7 +355,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                     // Copy parsed values to the actual variables
                     strcpy(SS2userName, tempUserName);
@@ -366,7 +366,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "*Error: Invalid format#";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -384,7 +384,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
 
            // Format the success message and send it
            sprintf(payload, "*SS2-OK,%s,%s#", SS2userName, SS2dateTime);
-           SendReply(payload,InputVia);
+           SendReply(InputVia,payload);
           // tx_event_pending = 1;
 
     }
@@ -399,7 +399,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "Error: Missing or invalid parameters";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                     // Copy parsed values to the actual variables
                     strcpy(PWuserName, tempUserName);
@@ -410,7 +410,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "Error: Invalid format";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -428,7 +428,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
 
            // Format the success message and send it
            sprintf(payload, "*PW-OK,%s,%s#", PWuserName, PWdateTime);
-           SendReply(payload,InputVia);
+           SendReply(InputVia,payload);
           // tx_event_pending = 1;
 
     }
@@ -443,7 +443,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "*Error: Missing or invalid parameters#";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                     // Copy parsed values to the actual variables
                     strcpy(PW1userName, tempUserName);
@@ -454,7 +454,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "Error: Invalid format";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -471,7 +471,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
 
            // Format the success message and send it
            sprintf(payload, "*PW1-OK,%s,%s#", PW1userName, PW1dateTime);
-           SendReply(payload,InputVia);
+           SendReply(InputVia,payload);
           // tx_event_pending = 1;
 
     }
@@ -486,7 +486,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
                 if (strlen(tempUserName) == 0 || strlen(tempDateTime) == 0 || strlen(tempBuf) == 0) {
                     // Send error message if any required parameters are missing or invalid
                     const char* errorMsg = "Error: Missing or invalid parameters";
-                    SendReply(errorMsg,InputVia);
+                    SendReply(InputVia,errorMsg);
                 } else {
                     // Copy parsed values to the actual variables
                     strcpy(PW2userName, tempUserName);
@@ -497,7 +497,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             else {
                 // Send error message if parsing failed
                 const char* errorMsg = "Error: Invalid format";
-                SendReply(errorMsg,InputVia);
+                SendReply(InputVia,errorMsg);
             }
         }
         else if(strcmp(InputVia, "UART") == 0)
@@ -515,7 +515,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
 
            // Format the success message and send it
            sprintf(payload, "*PW2-OK,%s,%s#", PW2userName, PW2dateTime);
-           SendReply(payload,InputVia);
+           SendReply(InputVia,payload);
            //tx_event_pending = 1;
 
     }
