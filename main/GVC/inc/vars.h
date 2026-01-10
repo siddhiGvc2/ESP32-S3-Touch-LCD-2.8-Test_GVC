@@ -83,6 +83,10 @@ char CCuserName[100];
 char RSTdateTime[100];
 char RSTuserName[100];
 
+int EnabledChannel[NUM_CHANNELS] = {1,1,1,1,1,1,1};
+int16_t chValue;
+
+
 
 // vars for AAC
 // extern int track_id,Total_Tracks,CurrentTrack;  

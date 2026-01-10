@@ -197,6 +197,43 @@ void AnalyseKwikpayCommands (char* InputVia, char* rx_buffer)
             SaveInteger(NVS_CASH7_KEY, CashTotals[6]);
 
     }
+    else if(strncmp(rx_buffer,"*CHENA:",7)==0)
+    {
+        int temp[NUM_CHANNELS] = {0};
+        int parsed = sscanf(rx_buffer, "*CHENA:%d:%d:%d:%d:%d:%d:%d#",
+                            &temp[0], &temp[1], &temp[2],
+                            &temp[3], &temp[4], &temp[5], &temp[6]);
+
+        if (parsed == NUM_CHANNELS) {
+            for (int i = 0; i < NUM_CHANNELS; i++) {
+                EnabledChannel[i] = (temp[i] ? 1 : 0); // force 0/1
+            }
+              SaveInteger(NVS_CHNL1_KEY, EnabledChannel[0]);
+            SaveInteger(NVS_CHNL2_KEY, EnabledChannel[1]);
+            SaveInteger(NVS_CHNL3_KEY, EnabledChannel[2]);
+            SaveInteger(NVS_CHNL4_KEY, EnabledChannel[3]);
+            SaveInteger(NVS_CHNL5_KEY, EnabledChannel[4]);
+            SaveInteger(NVS_CHNL6_KEY, EnabledChannel[5]);
+            SaveInteger(NVS_CHNL7_KEY, EnabledChannel[6]);
+            sprintf(payload,"*CHENA:%d:%d:%d:%d:%d:%d:%d#",
+                 EnabledChannel[0], EnabledChannel[1], EnabledChannel[2],
+                 EnabledChannel[3], EnabledChannel[4], EnabledChannel[5],
+                 EnabledChannel[6]);
+
+            SendReply(InputVia,payload);
+        }
+    }
+    //030925
+    else if (strncmp(rx_buffer, "*PULSES?", 8) == 0) {
+  
+        
+        sprintf(payload,"*CHENA:%d:%d:%d:%d:%d:%d:%d#",
+                 EnabledChannel[0], EnabledChannel[1], EnabledChannel[2],
+                 EnabledChannel[3], EnabledChannel[4], EnabledChannel[5],
+                 EnabledChannel[6]);
+
+        SendReply(InputVia,payload);
+    }
    
     
     
@@ -222,6 +259,7 @@ void AnalyseKwikpayCommands (char* InputVia, char* rx_buffer)
         sprintf(payload,"*CA-OK,%s,%s,%d,%d#",CAuserName,CAdateTime,pulseWidth,SignalPolarity);
         SendReply(payload,InputVia);
     }
+
 
 
 

@@ -67,22 +67,20 @@ extern int sock;
 extern char INHuserName[100];
 extern char INHdateTime[100];
 extern int INHOutputValue;
-
 extern char PTuserName[100];
 extern char PTdateTime[100];   
 extern char PassThruValue[2];
-
 extern char CAuserName[100];
 extern char CAdateTime[100];
-
 extern char CCdateTime[100];
 extern char CCuserName[100];
-
 extern char RSTdateTime[100];
 extern char RSTuserName[100];
-
 extern int pulseWidth;
 extern int SignalPolarity;
+extern int EnabledChannel[NUM_CHANNELS];
+extern int16_t chValue;
+
 
 
 // vars for AAC
