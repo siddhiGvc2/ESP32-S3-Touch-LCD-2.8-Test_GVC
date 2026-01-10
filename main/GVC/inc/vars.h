@@ -60,7 +60,7 @@ int pulses = 0; // number of pulses for generating pulses on output pin
 int Totals[7];
 int CashTotals[7];
 char UniqueTimeStamp[100];
-
+int sock = -1;
 
     //  INHUserName:INHdateTime:INHOutputValue 
 char INHuserName[100];

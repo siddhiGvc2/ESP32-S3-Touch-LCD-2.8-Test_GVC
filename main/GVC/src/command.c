@@ -203,7 +203,7 @@ void AnalyseGeneralCommands (char* InputVia,char* rx_buffer) {
             ESP_LOGI(InputVia,"*MIP-OK,%s,%s#",MIPuserName,MIPdateTime);
         }    
         SendReply(payload,InputVia);
-        SaveString(payload);
+        
        // tx_event_pending = 1;
 
     }
